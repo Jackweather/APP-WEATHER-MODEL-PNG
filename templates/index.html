@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Parent Directory Viewer</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        h1 {
+            text-align: center;
+        }
+        #file-list {
+            margin-top: 20px;
+        }
+        #file-list a {
+            display: block;
+            margin-bottom: 10px;
+            color: #007BFF;
+            text-decoration: none;
+        }
+        #file-list a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <h1>Parent Directory Viewer</h1>
+    <div id="file-list"></div>
+
+    <script>
+        // 📥 Load files from backend
+        async function loadFiles() {
+            const response = await fetch('/images');
+            const data = await response.json();
+            const fileList = document.getElementById('file-list');
+            fileList.innerHTML = '';
+
+            for (const [folder, files] of Object.entries(data)) {
+                const folderHeader = document.createElement('h2');
+                folderHeader.textContent = folder;
+                fileList.appendChild(folderHeader);
+
+                files.forEach(file => {
+                    const link = document.createElement('a');
+                    link.href = `/public/${folder}/${file}`;
+                    link.textContent = file;
+                    link.target = '_blank';
+                    fileList.appendChild(link);
+                });
+            }
+        }
+
+        // 🚀 Load all on start
+        loadFiles();
+    </script>
+</body>
+</html>
